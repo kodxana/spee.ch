@@ -1,10 +1,9 @@
 import React from 'react';
 import ErrorPage from '@pages/ErrorPage';
-import ShowAssetLite from '@pages/ShowAssetLite';
-import ShowAssetDetails from '@pages/ShowAssetDetails';
+import ShowAsset from '@pages/ShowAsset';
 import ShowChannel from '@pages/ShowChannel';
 
-import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from '../../constants/show_request_types';
+import { CHANNEL, ASSET } from '../../constants/show_request_types';
 
 class ContentPageWrapper extends React.Component {
   componentDidMount () {
@@ -25,10 +24,8 @@ class ContentPageWrapper extends React.Component {
     switch (requestType) {
       case CHANNEL:
         return <ShowChannel />;
-      case ASSET_LITE:
-        return <ShowAssetLite />;
-      case ASSET_DETAILS:
-        return <ShowAssetDetails />;
+      case ASSET:
+        return <ShowAsset />;
       default:
         return <p>loading...</p>;
     }

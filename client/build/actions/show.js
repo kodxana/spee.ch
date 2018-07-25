@@ -53,7 +53,7 @@ function onNewChannelRequest(channelName, channelId) {
 }
 
 function onNewAssetRequest(name, id, channelName, channelId, extension) {
-  var requestType = extension ? _show_request_types.ASSET_LITE : _show_request_types.ASSET_DETAILS;
+  var requestType = _show_request_types.ASSET;
   var requestId = "ar#".concat(name, "#").concat(id, "#").concat(channelName, "#").concat(channelId);
   return {
     type: actions.ASSET_REQUEST_NEW,

@@ -39,16 +39,16 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
-var ShowAssetDetails =
+var ShowAsset =
 /*#__PURE__*/
 function (_React$Component) {
-  function ShowAssetDetails() {
-    _classCallCheck(this, ShowAssetDetails);
+  function ShowAsset() {
+    _classCallCheck(this, ShowAsset);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(ShowAssetDetails).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(ShowAsset).apply(this, arguments));
   }
 
-  _createClass(ShowAssetDetails, [{
+  _createClass(ShowAsset, [{
     key: "render",
     value: function render() {
       var asset = this.props.asset;
@@ -70,11 +70,11 @@ function (_React$Component) {
     }
   }]);
 
-  _inherits(ShowAssetDetails, _React$Component);
+  _inherits(ShowAsset, _React$Component);
 
-  return ShowAssetDetails;
+  return ShowAsset;
 }(_react.default.Component);
 
 ;
-var _default = ShowAssetDetails;
+var _default = ShowAsset;
 exports.default = _default;

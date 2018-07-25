@@ -9,9 +9,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _ErrorPage = _interopRequireDefault(require("@pages/ErrorPage"));
 
-var _ShowAssetLite = _interopRequireDefault(require("@pages/ShowAssetLite"));
-
-var _ShowAssetDetails = _interopRequireDefault(require("@pages/ShowAssetDetails"));
+var _ShowAsset = _interopRequireDefault(require("@pages/ShowAsset"));
 
 var _ShowChannel = _interopRequireDefault(require("@pages/ShowChannel"));
 
@@ -75,11 +73,8 @@ function (_React$Component) {
         case _show_request_types.CHANNEL:
           return _react.default.createElement(_ShowChannel.default, null);
 
-        case _show_request_types.ASSET_LITE:
-          return _react.default.createElement(_ShowAssetLite.default, null);
-
-        case _show_request_types.ASSET_DETAILS:
-          return _react.default.createElement(_ShowAssetDetails.default, null);
+        case _show_request_types.ASSET:
+          return _react.default.createElement(_ShowAsset.default, null);
 
         default:
           return _react.default.createElement("p", null, "loading...");

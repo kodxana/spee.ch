@@ -1,5 +1,5 @@
 import * as actions from '../constants/show_action_types';
-import { CHANNEL, ASSET_LITE, ASSET_DETAILS } from '../constants/show_request_types';
+import { CHANNEL, ASSET } from '../constants/show_request_types';
 
 // basic request parsing
 export function onHandleShowPageUri (params) {
@@ -21,12 +21,17 @@ export function onNewChannelRequest (channelName, channelId) {
   const requestId = `cr#${channelName}#${channelId}`;
   return {
     type: actions.CHANNEL_REQUEST_NEW,
-    data: { requestType, requestId, channelName, channelId },
+    data: {
+      requestType,
+      requestId,
+      channelName,
+      channelId,
+    },
   };
 }
 
 export function onNewAssetRequest (name, id, channelName, channelId, extension) {
-  const requestType = extension ? ASSET_LITE : ASSET_DETAILS;
+  const requestType = ASSET;
   const requestId = `ar#${name}#${id}#${channelName}#${channelId}`;
   return {
     type: actions.ASSET_REQUEST_NEW,
@@ -58,7 +63,11 @@ export function onRequestUpdate (requestType, requestId) {
 export function addRequestToRequestList (id, error, key) {
   return {
     type: actions.REQUEST_LIST_ADD,
-    data: { id, error, key },
+    data: {
+      id,
+      error,
+      key,
+    },
   };
 }
 
@@ -67,7 +76,14 @@ export function addRequestToRequestList (id, error, key) {
 export function addAssetToAssetList (id, error, name, claimId, shortId, claimData) {
   return {
     type: actions.ASSET_ADD,
-    data: { id, error, name, claimId, shortId, claimData },
+    data: {
+      id,
+      error,
+      name,
+      claimId,
+      shortId,
+      claimData,
+    },
   };
 }
 
@@ -89,14 +105,22 @@ export function addNewChannelToChannelList (id, name, shortId, longId, claimsDat
 export function onUpdateChannelClaims (channelKey, name, longId, page) {
   return {
     type: actions.CHANNEL_CLAIMS_UPDATE_ASYNC,
-    data: {channelKey, name, longId, page},
+    data: {
+      channelKey,
+      name,
+      longId,
+      page,
+    },
   };
 }
 
 export function updateChannelClaims (channelListId, claimsData) {
   return {
     type: actions.CHANNEL_CLAIMS_UPDATE_SUCCESS,
-    data: {channelListId, claimsData},
+    data: {
+      channelListId,
+      claimsData,
+    },
   };
 }
 
@@ -105,7 +129,10 @@ export function updateChannelClaims (channelListId, claimsData) {
 export function fileRequested (name, claimId) {
   return {
     type: actions.FILE_REQUESTED,
-    data: { name, claimId },
+    data: {
+      name,
+      claimId,
+    },
   };
 }
 
