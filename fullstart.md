@@ -69,8 +69,12 @@ $ wget --quiet -O ~/latest_daemon.zip https://lbry.io/get/lbrynet.linux.zip
 $ unzip -o -u "~/latest_daemon.zip"
 ```
 ### Start lbrynet
+open a tmux session
 ```
 $ tmux
+```
+start lbrynet daemon
+```
 $ ./lbrynet-daemon
 ```
 
