@@ -105,13 +105,13 @@ directions: [here](https://www.ffmpeg.org/download.html)
 ### Clone the spee.ch repo
 
 ```
-$ git clone https://github.com/lbryio/www.spee.ch.git
+$ git clone https://github.com/lbryio/spee.ch.git
 ```
 
 Change directory into your site’s folder
 
 ```
-$ cd <name-of-your-site>` or `$ cd www.spee.ch
+$ cd spee.ch
 ```
 
 Install dependencies
