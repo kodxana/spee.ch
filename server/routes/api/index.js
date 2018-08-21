@@ -12,6 +12,7 @@ const claimGet = require('../../controllers/api/claim/get');
 const claimList = require('../../controllers/api/claim/list');
 const claimLongId = require('../../controllers/api/claim/longId');
 const claimPublish = require('../../controllers/api/claim/publish');
+const claimUpdate = require('../../controllers/api/claim/update');
 const claimResolve = require('../../controllers/api/claim/resolve');
 const claimShortId = require('../../controllers/api/claim/shortId');
 const fileAvailability = require('../../controllers/api/file/availability');
@@ -34,6 +35,7 @@ module.exports = (app) => {
   app.get('/api/claim/list/:name', torCheckMiddleware, claimList);
   app.post('/api/claim/long-id', torCheckMiddleware, claimLongId); // note: should be a 'get'
   app.post('/api/claim/publish', torCheckMiddleware, multipartMiddleware, claimPublish);
+  app.post('/api/claim/update', torCheckMiddleware, multipartMiddleware, claimUpdate);
   app.get('/api/claim/resolve/:name/:claimId', torCheckMiddleware, claimResolve);
   app.get('/api/claim/short-id/:longId/:name', torCheckMiddleware, claimShortId);
   // file routes
