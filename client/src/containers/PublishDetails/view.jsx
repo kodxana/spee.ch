@@ -29,7 +29,7 @@ class PublishDetails extends React.Component {
           <ChannelSelect />
         </Row>
 
-        { this.props.file.type === 'video/mp4' && (
+        { this.props.file && this.props.file.type === 'video/mp4' && (
           <Row>
             <PublishThumbnailInput />
           </Row>

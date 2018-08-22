@@ -6,18 +6,19 @@ import PublishDisabledMessage from '@containers/PublishDisabledMessage';
 
 class PublishTool extends React.Component {
   render () {
-    if (this.props.disabled) {
+    const {disabled, file, update, status} = this.props;
+    if (disabled) {
       return (
         <PublishDisabledMessage />
       );
     } else {
-      if (this.props.file) {
-        if (this.props.status) {
+      if (file || update) {
+        if (status) {
           return (
             <PublishStatus />
           );
         } else {
-          return <PublishPreview />;
+          return <PublishPreview update={update} />;
         }
       }
       return <Dropzone />;

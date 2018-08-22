@@ -14,7 +14,7 @@ class PublishPreview extends React.Component {
         </Row>
         <HorizontalSplit
           leftSide={<Dropzone />}
-          rightSide={<PublishDetails />}
+          rightSide={this.props.update ? <p>UPDATE</p> : <PublishDetails />}
         />
       </div>
     );
