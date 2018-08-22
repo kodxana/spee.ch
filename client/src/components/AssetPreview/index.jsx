@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const AssetPreview = ({ defaultThumbnail, claimData: { name, claimId, fileExt, contentType, thumbnail } }) => {
+const AssetPreview = (props) => {
+  console.log("AssetPreview props:", props);
+  const {defaultThumbnail, claimData} = props;
+  const {name, claimId, fileExt, contentType, thumbnail, channelName, certificateId} = claimData;
   const embedUrl = `/${claimId}/${name}.${fileExt}`;
-  const showUrl = `/${claimId}/${name}`;
+  const showUrl = `/${channelName}:${certificateId}/${name}`;
   return (
     <Link to={showUrl} >
       {(() => {
