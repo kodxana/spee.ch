@@ -41,6 +41,7 @@ const initialState = {
     license    : '',
     nsfw       : false,
   },
+  isUpdate : false,
   thumbnail: null,
   thumbnailChannel,
   thumbnailChannelId,
@@ -89,6 +90,10 @@ export default function (state = initialState, action) {
     case actions.THUMBNAIL_NEW:
       return Object.assign({}, state, {
         thumbnail: action.data,
+      });
+    case actions.SET_UPDATE_TRUE:
+      return Object.assign({}, state, {
+        isUpdate: true,
       });
     default:
       return state;

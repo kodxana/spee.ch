@@ -14,6 +14,12 @@ export function clearFile () {
   };
 }
 
+export function setUpdateTrue () {
+  return {
+    type: actions.SET_UPDATE_TRUE,
+  };
+}
+
 export function updateMetadata (name, value) {
   return {
     type: actions.METADATA_UPDATE,
