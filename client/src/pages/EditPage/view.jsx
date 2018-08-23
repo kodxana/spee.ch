@@ -12,6 +12,9 @@ class EditPage extends React.Component {
       ['title', 'description', 'license', 'nsfw'].forEach(meta => updateMetadata(meta, asset.claimData[meta]));
     }
   }
+  componentWillUnmount () {
+    this.props.clearFile();
+  }
   render () {
     return (
       <PageLayout

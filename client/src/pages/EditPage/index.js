@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
-import { setUpdateTrue, updateMetadata } from '../../actions/publish';
+import { setUpdateTrue, updateMetadata, clearFile } from '../../actions/publish';
 import { onHandleShowPageUri } from '../../actions/show';
 import View from './view';
 
-const mapStateToProps = (props) => {
-  const {show} = props;
+const mapStateToProps = ({ show }) => {
   // select request info
   const requestId = show.request.id;
   // select asset info
@@ -20,10 +19,11 @@ const mapStateToProps = (props) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  updateMetadata     : (name, value) => dispatch(updateMetadata(name, value)),
-  onHandleShowPageUri: (params) => dispatch(onHandleShowPageUri(params)),
-  setUpdateTrue      : () => dispatch(setUpdateTrue()),
-});
+const mapDispatchToProps = {
+  updateMetadata,
+  onHandleShowPageUri,
+  setUpdateTrue,
+  clearFile,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);
