@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Row from '@components/Row';
 
 const AssetTitle = ({ title, editable, channel, name, shortId }) => {
@@ -6,7 +7,7 @@ const AssetTitle = ({ title, editable, channel, name, shortId }) => {
     <Row>
       <h3>
         {title}
-        {editable && (<span> (<a href={`/edit/${channel}:${shortId}/${name}`}>edit</a>)</span>)}
+        {editable && (<span> (<Link to={`/edit/${channel}:${shortId}/${name}`}>edit</Link>)</span>)}
       </h3>
     </Row>
   );

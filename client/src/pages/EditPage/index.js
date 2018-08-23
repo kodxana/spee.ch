@@ -20,10 +20,10 @@ const mapStateToProps = (props) => {
   };
 };
 
-const mapDispatchToProps = {
-  setUpdateTrue,
-  onHandleShowPageUri,
-  updateMetadata,
-};
+const mapDispatchToProps = dispatch => ({
+  updateMetadata     : (name, value) => dispatch(updateMetadata(name, value)),
+  onHandleShowPageUri: (params) => dispatch(onHandleShowPageUri(params)),
+  setUpdateTrue      : () => dispatch(setUpdateTrue()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(View);

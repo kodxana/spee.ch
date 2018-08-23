@@ -8,10 +8,8 @@ class EditPage extends React.Component {
     const {asset, match, onHandleShowPageUri, setUpdateTrue, updateMetadata} = this.props;
     onHandleShowPageUri(match.params);
     setUpdateTrue();
-    console.log("EditPade did mount asset:", asset);
     if (asset) {
-      console.log("title:", asset.claimData.title);
-      // updateMetadata({ name: 'title', value: asset.claimData.title });
+      ['title', 'description', 'license', 'nsfw'].forEach(meta => updateMetadata(meta, asset.claimData[meta]));
     }
   }
   render () {

@@ -1,10 +1,12 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import PublishUrlInput from '@containers/PublishUrlInput';
 import PublishThumbnailInput from '@containers/PublishThumbnailInput';
 import PublishMetadataInputs from '@containers/PublishMetadataInputs';
 import ChannelSelect from '@containers/ChannelSelect';
 import Row from '@components/Row';
+import Label from '@components/Label';
+import RowLabeled from '@components/RowLabeled';
 import ButtonPrimaryJumbo from '@components/ButtonPrimaryJumbo';
 import ButtonTertiary from '@components/ButtonTertiary';
 import SpaceAround from '@components/SpaceAround';
@@ -19,17 +21,49 @@ class PublishDetails extends React.Component {
     this.props.startPublish(this.props.history);
   }
   render () {
+    const {file, update, asset} = this.props;
     return (
       <div>
-        <Row>
-          <PublishUrlInput />
-        </Row>
+        {update ? (asset && (
+          <React.Fragment>
+            <Row>
+              <RowLabeled
+                label={
+                  <Label value={'Channel:'} />
+                }
+                content={
+                  <span className='text'>
+                    {asset.claimData.channelName}
+                  </span>
+                }
+              />
+            </Row>
+            <Row>
+              <RowLabeled
+                label={
+                  <Label value={'Asset:'} />
+                }
+                content={
+                  <span className='text'>
+                    {asset.name}
+                  </span>
+                }
+              />
+            </Row>
+          </React.Fragment>
+        )) : (
+          <React.Fragment>
+            <Row>
+              <PublishUrlInput />
+            </Row>
 
-        <Row>
-          <ChannelSelect />
-        </Row>
+            <Row>
+              <ChannelSelect />
+            </Row>
+          </React.Fragment>
+        )}
 
-        { this.props.file && this.props.file.type === 'video/mp4' && (
+        { file && file.type === 'video/mp4' && !update && (
           <Row>
             <PublishThumbnailInput />
           </Row>
