@@ -43,7 +43,11 @@ function * publishFile (action) {
     }
     if (success) {
       yield put(clearFile());
-      return history.push(`/${success.data.claimId}/${success.data.name}`);
+      if (publishInChannel) {
+        return history.push(`/${loggedInChannel.name}:${loggedInChannel.shortId}/${success.data.name}`);
+      } else {
+        return history.push(`/${success.data.claimId}/${success.data.name}`);
+      }
     }
     if (loadStart) {
       yield put(updatePublishStatus(publishStates.LOAD_START, null));
