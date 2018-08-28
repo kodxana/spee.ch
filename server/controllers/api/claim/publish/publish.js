@@ -43,6 +43,8 @@ const publish = (publishParams, fileName, fileType) => {
         ]);
       })
       .then(([fileRecord, claimRecord]) => {
+        logger.info('fileRecord', fileRecord);
+        logger.info('claimRecord', claimRecord);
         // upsert the records
         const {name} = publishParams;
         const {claim_id: claimId} = publishResults;

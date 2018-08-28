@@ -1,6 +1,6 @@
 const logger = require('winston');
 
-const { details: { host }, publishing: { disabled, disabledMessage } } = require('@config/siteConfig');
+const { details: { host }, publishing: { disabled, disabledMessage, thumbnailChannel, thumbnailChannelId } } = require('@config/siteConfig');
 
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
 
@@ -71,6 +71,7 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       // publish the thumbnail, if one exists
       if (thumbnailPublishParams) {
         publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);
+        publishParams['metadata']['thumbnail'] = `${host}/${thumbnailChannel}:${thumbnailChannelId}/${name}-thumb`;
       }
       // publish the asset
       return publish(publishParams, fileName, fileType);

@@ -1,8 +1,9 @@
 import {buffers, END, eventChannel} from 'redux-saga';
 
-export const makePublishRequestChannel = (fd) => {
+export const makePublishRequestChannel = (fd, isUpdate) => {
+  console.log('makePublishRequestChannel isUpdate:', isUpdate);
   return eventChannel(emitter => {
-    const uri = '/api/claim/publish';
+    const uri = `/api/claim/${isUpdate ? 'update' : 'publish'}`;
     const xhr = new XMLHttpRequest();
     // add event listeners
     const onLoadStart = () => {

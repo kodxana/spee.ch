@@ -3,12 +3,10 @@ const db = require('../index.js');
 const createClaimRecordDataAfterPublish = (certificateId, channelName, fileName, fileType, publishParams, publishResults) => {
   const {
     name,
-    metadata: {
-      title,
-      description,
-      thumbnail,
-      nsfw,
-    },
+    title,
+    description,
+    thumbnail,
+    nsfw,
     claim_address: address,
     bid: amount,
   } = publishParams;

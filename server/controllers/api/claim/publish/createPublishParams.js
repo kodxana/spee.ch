@@ -30,9 +30,9 @@ const createPublishParams = (filePath, name, title, description, license, nsfw, 
     claim_address: publishing.primaryClaimAddress,
   };
   // add thumbnail to channel if video
-  if (thumbnail) {
-    publishParams['metadata']['thumbnail'] = thumbnail;
-  }
+  // if (thumbnail) {
+  //   publishParams['metadata']['thumbnail'] = thumbnail;
+  // }
   // add channel details if publishing to a channel
   if (channelName && channelClaimId) {
     publishParams['channel_name'] = channelName;
