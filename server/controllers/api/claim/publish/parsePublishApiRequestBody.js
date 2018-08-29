@@ -1,4 +1,4 @@
-const parsePublishApiRequestBody = ({name, nsfw, license, title, description, thumbnail, claimId}) => {
+const parsePublishApiRequestBody = ({name, nsfw, license, title, description, thumbnail}) => {
   // validate name
   if (!name) {
     throw new Error('no name field found in request');
@@ -13,7 +13,6 @@ const parsePublishApiRequestBody = ({name, nsfw, license, title, description, th
   title = title || null;
   description = description || null;
   thumbnail = thumbnail || null;
-  claimId = claimId || null;
   // return results
   return {
     name,
@@ -22,7 +21,6 @@ const parsePublishApiRequestBody = ({name, nsfw, license, title, description, th
     title,
     description,
     thumbnail,
-    claimId,
   };
 };
 

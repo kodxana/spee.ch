@@ -2,7 +2,8 @@ const path = require('path');
 const logger = require('winston');
 const db = require('../../../../models');
 
-const { details: { host }, publishing: { disabled, disabledMessage, thumbnailChannel, thumbnailChannelId } } = require('@config/siteConfig');
+const { details, publishing: { disabled, disabledMessage, thumbnailChannel, thumbnailChannelId, primaryClaimAddress } } = require('@config/siteConfig');
+const { getClaim } = require('../../../../lbrynet');
 
 const { sendGATimingEvent } = require('../../../../utils/googleAnalytics.js');
 
@@ -10,7 +11,8 @@ const { handleErrorResponse } = require('../../../utils/errorHandlers.js');
 
 const publish = require('../publish/publish.js');
 const createThumbnailPublishParams = require('../publish/createThumbnailPublishParams.js');
-// const parsePublishApiRequestFiles = require('../publish/parsePublishApiRequestFiles.js');
+const parsePublishApiRequestBody = require('../publish/parsePublishApiRequestBody');
+const {parsePublishApiRequestFile, parsePublishApiRequestThumbnail} = require('../publish/parsePublishApiRequestFiles.js');
 const authenticateUser = require('../publish/authentication.js');
 // const {parseUpdateFile, parseUpdateThumbnail} = require('./updatePublishParams');
 const validateFileTypeAndSize = require('../publish/validateFileTypeAndSize');
@@ -29,53 +31,6 @@ const updateMetadata = ({nsfw, license, title, description}) => {
   return update;
 };
 
-const parseUpdateFile = ({file}) => {
-  // make sure a file was provided
-  if (!file) {
-    return false;
-  }
-  if (!file.path) {
-    throw new Error('no file path found');
-  }
-  if (!file.type) {
-    throw new Error('no file type found');
-  }
-  if (!file.size) {
-    throw new Error('no file size found');
-  }
-  // validate the file name
-  if (!file.name) {
-    throw new Error('no file name found');
-  }
-  if (file.name.indexOf('.') < 0) {
-    throw new Error('no file extension found in file name');
-  }
-  if (file.name.indexOf('.') === 0) {
-    throw new Error('file name cannot start with "."');
-  }
-  if (/'/.test(file.name)) {
-    throw new Error('apostrophes are not allowed in the file name');
-  }
-  // validate the file
-  validateFileTypeAndSize(file);
-  // return results
-  return {
-    fileName         : file.name,
-    filePath         : file.path,
-    fileExtension    : path.extname(file.path),
-    fileType         : file.type,
-    // thumbnailFileName: (thumbnail ? thumbnail.name : null),
-    // thumbnailFilePath: (thumbnail ? thumbnail.path : null),
-    // thumbnailFileType: (thumbnail ? thumbnail.type : null),
-  };
-};
-
-const parseUpdateThumbnail = ({thumbnail}, claimName, license, nsfw) => {
-  if (!thumbnail) {
-    return false;
-  }
-  return createThumbnailPublishParams(thumbnail.path, claimName, license, nsfw);
-};
 
 const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) => {
   // logging
@@ -96,21 +51,18 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
   }
 
   // define variables
-  let channelName,
-    channelId,
-    channelPassword,
-    gaStartTime,
-    fileType,
-    name,
-    nsfw,
-    license,
-    title,
-    description,
-    publishParams;
+  let  channelName, channelId, channelPassword, description, fileName, filePath, fileExtension, fileType, gaStartTime, license, name, nsfw, thumbnail, thumbnailFileName, thumbnailFilePath, thumbnailFileType, title, publishParams, thumbnailParams, claimRecord;
   // record the start time of the request
   gaStartTime = Date.now();
 
   try {
+    ({name, nsfw, license, title, description, thumbnail} = parsePublishApiRequestBody(body));
+    if (files.file) {
+      ({fileName, filePath, fileExtension, fileType} = parsePublishApiRequestFile(files));
+      if (files.thumbnail) {
+        ({thumbnailFileName, thumbnailFilePath, thumbnailFileType} = parsePublishApiRequestThumbnail(files));
+      }
+    }
     ({channelName, channelId, channelPassword} = body);
   } catch (error) {
     return res.status(400).json({success: false, message: error.message});
@@ -118,54 +70,119 @@ const claimUpdate = ({ body, files, headers, ip, originalUrl, user, tor }, res) 
 
   // check channel authorization
   authenticateUser(channelName, channelId, channelPassword, user)
-    // .then(() => {
-    //   return db.Claim.findOne({
-    //     where: {
-    //       name: body.name,
-    //       channelName,
-    //     },
-    //   });
-    // })
-    // .then(claim => {
-    //   return updatePublishParams(claim, body, files);
-    // })
     .then(({ channelName, channelClaimId }) => {
-      ({name, nsfw, license, title, description} = body);
-      return Promise.all([
-        db.Claim.findOne({ where: { name, channelName } }),
-        updateMetadata({nsfw, license, title, description}),
-        db.File.findOne({ where: { name } }),
-        parseUpdateFile(files),
-        parseUpdateThumbnail(files, name, license, nsfw),
-      ]);
+      logger.info('auth good', channelName);
+      // const {name, nsfw, license, title, description} = body;
+      // return Promise.all([
+      //   db.Claim.findOne({ where: { name, channelName } }),
+      //   updateMetadata({nsfw, license, title, description}),
+      //   db.File.findOne({ where: { name } }),
+      //   // parseUpdateFile(files),
+      //   // parseUpdateThumbnail(files, name, license, nsfw),
+      // ]);
+      return db.Claim.findOne({where: {name, channelName,},});
     })
-    .then(([existingClaim, metadataUpdate, existingFile, newFile, newThumbnail]) => {
-      const {name, nsfw, license, title, description, thumbnail} = existingClaim;
-      publishParams = Object.assign(
-        {},
-        {name, nsfw, license, title, description, thumbnail},
-        metadataUpdate
-      );
-      if (newThumbnail) {
-        publishParams['thumbnail'] = `${host}/${thumbnailChannel}:${thumbnailChannelId}/${name}-thumb`;
+    .then(claim => {
+      claimRecord = claim;
+      return getClaim(`${claim.name}#${claim.claimId}`);
+    })
+    .then(fullClaim => {
+      const metadata = Object.assign({}, {
+        title      : claimRecord.title,
+        description: claimRecord.description,
+        nsfw       : claimRecord.nsfw,
+        license    : claimRecord.license,
+        language   : 'en',
+        author     : details.title,
+      }, updateMetadata({title, description, nsfw, license}));
+      const publishParams = {
+        name,
+        bid          : 0.01,
+        claim_address: primaryClaimAddress,
+        channel_name : channelName,
+        channel_id   : channelId,
+        metadata,
+      };
+      if (files.file) {
+        publishParams['file_path'] = filePath;
+      } else {
+        publishParams['sources'] = {'lbry_sd_hash': fullClaim.stream_hash};
       }
+      return publish(publishParams, fileName, fileType);
+    })
+    // .then(([existingClaim, metadataUpdate, existingFile, /*newFile, newThumbnail*/]) => {
+    //   logger.info("multi-promise good");
+    //   if (existingClaim) {
+    //     logger.info('existingClaim', existingClaim);
+    //     return getClaim(`${existingClaim.name}#${existingClaim.claimId}`);
+    //   }
+    //   const metadata = Object.assign({}, {
+    //     title      : existingClaim.title,
+    //     description: existingClaim.description,
+    //     nsfw       : existingClaim.nsfw,
+    //     license    : existingClaim.license,
+    //     language   : 'en',
+    //     author     : details.title,
+    //   }, metadataUpdate);
+    //   if (existingClaim.contentType === 'video/mp4' && files.thumbnail) {
+    //     metadata['thumbnail'] = `${details.host}/${thumbnailChannel}:${thumbnailChannelId}/${name}-thumb`;
+    //     thumbnailParams = {
+    //       name         : `${name}-thumb`,
+    //       file_path    : thumbnailFilePath,
+    //       bid          : 0.01,
+    //       claim_address: primaryClaimAddress,
+    //       channel_name : thumbnailChannel,
+    //       channel_id   : thumbnailChannelId,
+    //       metadata     : {
+    //         title      : `${name} thumbnail`,
+    //         description: `a thumbnail for ${name}`,
+    //         author     : details.title,
+    //         language   : 'en',
+    //         license    : metadata.license,
+    //         nsfw       : metadata.nsfw,
+    //       },
+    //     };
+    //   }
+    //   publishParams = {
+    //     name         : existingClaim.name,
+    //     bid          : 0.01,
+    //     claim_address: primaryClaimAddress,
+    //     channel_name : existingClaim.channelName,
+    //     channel_id   : existingClaim.certificateId,
+    //     metadata,
+    //   };
+    //   if (existingClaim) {
+    //     publishParams['sources'] = {};
+    //   }
+    //   if (files.file) {
+    //     publishParams['file_path'] = filePath;
+    //   }
+    //   if (thumbnailParams) {
+    //     logger.info('doing a thumbnail publish update', thumbnailParams);
+    //     publish(thumbnailParams, thumbnailFileName, thumbnailFileType);
+    //   }
+    //   logger.info('doing a publish update', publishParams);
+    //   return publish(publishParams, fileName, fileType);
     // })
-    // // .then(({publishParams, file}) => {
-    // //   fileType = file.type;
-    // //   logger.info('update/index.js 70 file keys:', Object.keys(file).reduce((acc, val) => acc.concat([val]), []));
-    // //   return publish(publishParams, file.name, fileType);
-    // // })
-    // .then(result => {
-    //   res.status(200).json({
-    //     success: true,
-    //     message: 'you did a publish update',
-    //     result,
-    //   });
-
+    .then(result => {
+      res.status(200).json({
+        success: true,
+        message: 'see below',
+        result,
+        // data   : {
+        //   name    : result.name,
+        //   claimId : result.claim_id,
+        //   url     : `${details.host}/${result.claim_id}/${name}`, // for backwards compatability with app
+        //   showUrl : `${details.host}/${result.claim_id}/${name}`,
+        //   // serveUrl: `${details.host}/${result.claim_id}/${name}${fileE}`,
+        //   lbryTx  : result,
+        // },
+      });
       // record the publish end time and send to google analytics
-      sendGATimingEvent('end-to-end', 'update', fileType, gaStartTime, Date.now());
+      // sendGATimingEvent('end-to-end', 'update', fileType, gaStartTime, Date.now());
     })
     .catch(error => {
+      logger.info("update/index.js fail");
       handleErrorResponse(originalUrl, ip, error, res);
     });
 };

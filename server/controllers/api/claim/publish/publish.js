@@ -8,6 +8,7 @@ const deleteFile = require('./deleteFile.js');
 const publish = (publishParams, fileName, fileType) => {
   return new Promise((resolve, reject) => {
     let publishResults, certificateId, channelName;
+    logger.info('publishClaim:', publishParams);
     // publish the file
     return publishClaim(publishParams)
       .then(tx => {
@@ -58,14 +59,14 @@ const publish = (publishParams, fileName, fileType) => {
         ]);
       })
       .then(([file, claim]) => {
-        logger.debug('File and Claim records successfully created');
+        logger.info('File and Claim records successfully created');
         return Promise.all([
           file.setClaim(claim),
           claim.setFile(file),
         ]);
       })
       .then(() => {
-        logger.debug('File and Claim records successfully associated');
+        logger.info('File and Claim records successfully associated');
         // resolve the promise with the result from lbryApi publishClaim;
         resolve(publishResults);
       })

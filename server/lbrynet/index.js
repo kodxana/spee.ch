@@ -7,7 +7,7 @@ const handleLbrynetResponse = require('./utils/handleLbrynetResponse.js');
 
 module.exports = {
   publishClaim (publishParams) {
-    logger.debug(`lbryApi >> Publishing claim to "${publishParams.name}"`);
+    logger.info(`lbryApi >> Publishing claim to "${publishParams.name}"`);
     const gaStartTime = Date.now();
     return new Promise((resolve, reject) => {
       axios
@@ -16,10 +16,12 @@ module.exports = {
           params: publishParams,
         })
         .then(response => {
+          logger.info('lbrynet success', Object.keys(response));
           sendGATimingEvent('lbrynet', 'publish', chooseGaLbrynetPublishLabel(publishParams), gaStartTime, Date.now());
           handleLbrynetResponse(response, resolve, reject);
         })
         .catch(error => {
+          logger.info('lbrynet error');
           reject(error);
         });
     });

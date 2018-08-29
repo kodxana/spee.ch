@@ -12,7 +12,7 @@ const publish = require('./publish.js');
 const createPublishParams = require('./createPublishParams.js');
 const createThumbnailPublishParams = require('./createThumbnailPublishParams.js');
 const parsePublishApiRequestBody = require('./parsePublishApiRequestBody.js');
-const parsePublishApiRequestFiles = require('./parsePublishApiRequestFiles.js');
+const {parsePublishApiRequestFiles} = require('./parsePublishApiRequestFiles.js');
 const authenticateUser = require('./authentication.js');
 
 const CLAIM_TAKEN = 'CLAIM_TAKEN';
@@ -71,8 +71,8 @@ const claimPublish = ({ body, files, headers, ip, originalUrl, user, tor }, res)
       // publish the thumbnail, if one exists
       if (thumbnailPublishParams) {
         publish(thumbnailPublishParams, thumbnailFileName, thumbnailFileType);
-        publishParams['metadata']['thumbnail'] = `${host}/${thumbnailChannel}:${thumbnailChannelId}/${name}-thumb`;
       }
+      logger.info('api/claim/publish', publishParams);
       // publish the asset
       return publish(publishParams, fileName, fileType);
     })

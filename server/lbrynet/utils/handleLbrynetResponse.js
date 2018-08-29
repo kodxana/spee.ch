@@ -1,11 +1,11 @@
 const logger = require('winston');
 
 const handleLbrynetResponse = ({ data }, resolve, reject) => {
-  logger.debug('lbry api data:', data);
+  logger.info('lbry api data:', data);
   if (data.result) {
     // check for an error
     if (data.result.error) {
-      logger.debug('Lbrynet api error:', data.result.error);
+      logger.info('Lbrynet api error:', data.result.error);
       reject(new Error(data.result.error));
       return;
     };
