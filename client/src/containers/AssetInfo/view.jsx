@@ -9,7 +9,8 @@ import ClickToCopy from '@components/ClickToCopy';
 
 class AssetInfo extends React.Component {
   render () {
-    const { asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
+    const { channelShortId, asset: { shortId, claimData : { channelName, certificateId, description, name, claimId, fileExt, contentType, thumbnail, host } } } = this.props;
+    const identifier = channelName && channelShortId ? channelName + ':' + channelShortId : claimId;
     return (
       <div>
         {channelName && (
@@ -20,7 +21,7 @@ class AssetInfo extends React.Component {
               }
               content={
                 <span className='text'>
-                  <Link to={`/${channelName}:${certificateId}`}>{channelName}</Link>
+                  <Link to={`/${channelName}:${shortId}`}>{channelName}</Link>
                 </span>
               }
             />
@@ -66,12 +67,12 @@ class AssetInfo extends React.Component {
                 {(contentType === 'video/mp4') ? (
                   <ClickToCopy
                     id={'embed-text-video'}
-                    value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${claimId}/${name}.${fileExt}"/></video>`}
+                    value={`<video width="100%" controls poster="${thumbnail}" src="${host}/${identifier}/${name}.${fileExt}"/></video>`}
                   />
                 ) : (
                   <ClickToCopy
                     id={'embed-text-image'}
-                    value={`<img src="${host}/${claimId}/${name}.${fileExt}"/>`}
+                    value={`<img src="${host}/${identifier}/${name}.${fileExt}"/>`}
                   />
                 )}
               </div>
