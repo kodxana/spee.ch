@@ -7,11 +7,11 @@ const ChannelTools = () => {
   return (
     <div>
       <Row>
-        <h3>Log in to an existing channel:</h3>
+        <h3>Zaloguj się do istniejącego kanału:</h3>
         <ChannelLoginForm />
       </Row>
       <Row>
-        <h3>Create a brand new channel:</h3>
+        <h3>Stwórz nowy kanał:</h3>
         <ChannelCreateForm />
       </Row>
     </div>
