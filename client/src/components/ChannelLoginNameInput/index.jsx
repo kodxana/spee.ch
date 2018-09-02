@@ -6,7 +6,7 @@ const ChannelLoginNameInput  = ({ channelName, handleInput }) => {
   return (
     <RowLabeled
       label={
-        <Label value={'Name:'} />
+        <Label value={'Nazwa:'} />
       }
       content={
         <div className='input-area'>
@@ -16,7 +16,7 @@ const ChannelLoginNameInput  = ({ channelName, handleInput }) => {
             id='channel-login-name-input'
             className='input-text'
             name='name'
-            placeholder='Your Channel Name'
+            placeholder='Nazwa Twojego Kanału'
             value={channelName}
             onChange={handleInput}
           />
