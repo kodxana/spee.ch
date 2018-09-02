@@ -6,7 +6,7 @@ const ChannelLoginPasswordInput  = ({ channelPassword, handleInput }) => {
   return (
     <RowLabeled
       label={
-        <Label value={'Password:'} />
+        <Label value={'Hasło:'} />
       }
       content={
         <div className='input-area'>
