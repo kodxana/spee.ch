@@ -15,7 +15,7 @@ const ChannelCreateNameInput  = ({ value, error, handleNameInput }) => {
             type='text'
             name='channel'
             className='input-text'
-            placeholder='exampleChannelName'
+            placeholder='przykładowaNazwaKanału'
             value={value}
             onChange={handleNameInput}
           />
