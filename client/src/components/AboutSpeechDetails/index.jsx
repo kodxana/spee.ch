@@ -6,19 +6,19 @@ const AboutSpeechDetails = () => {
     <div>
       <Row>
         <p className={'text--large'}>
-          Spee.ch is a media-hosting site that reads from and publishes content to the <a className='link--primary' href='https://lbry.io'>LBRY</a> blockchain.
+          Spee.ch jest witryną obsługującą media, która czyta i publikuje treści na blockchainie <a className='link--primary' href='https://lbry.io'>LBRY</a>.
         </p>
         <p className={'text--large'}>
-          Spee.ch is a hosting service, but with the added benefit that it stores your content on a decentralized network of computers -- the <a className='link--primary' href='https://lbry.io/get'>LBRY</a> network.  This means that your images are stored in multiple locations without a single point of failure.
+          Spee.ch jest stroną hostingową, ale z dodatkową korzyścią, przechowuje twoje treści na zdecentralizowanej sieci komputerów -- <a className='link--primary' href='https://lbry.io/get'>LBRY</a> network.  Oznacza to, że zdjęcia są przechowywane w wielu lokalizacjach bez żadnego punktu awarii.
         </p>
       </Row>
       <Row>
-        <h3>Contribute</h3>
+        <h3>Współpraca</h3>
         <p className={'text--large'}>
-          If you have an idea for your own spee.ch-like site on top of LBRY, fork our <a className='link--primary' href='https://github.com/lbryio/spee.ch'>github repo</a> and go to town!
+          Jeśli masz pomysł na własną stronę podobną do podanej wyżej, sklonuj nasze <a className='link--primary' href='https://github.com/lbryio/spee.ch'>repozytorium</a> i do dzieła!
         </p>
         <p className={'text--large'}>
-          If you want to improve spee.ch, join our <a className='link--primary' href='https://chat.lbry.io'>discord channel</a> or solve one of our <a className='link--primary' href='https://github.com/lbryio/spee.ch/issues'>github issues</a>.
+          Jeśli chcesz ulepszać spee.ch, dołącz do naszego <a className='link--primary' href='https://chat.lbry.io'>serwera na discordzie</a> albo rozwiąż jakiś <a className='link--primary' href='https://github.com/lbryio/spee.ch/issues'>problem na github</a>.
         </p>
       </Row>
     </div>
